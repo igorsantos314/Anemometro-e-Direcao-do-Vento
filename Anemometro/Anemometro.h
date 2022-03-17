@@ -1,0 +1,8 @@
+class Anemometro{
+
+public:
+  Anemometro(){
+    
+  }
+
+};
