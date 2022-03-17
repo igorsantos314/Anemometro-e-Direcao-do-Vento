@@ -17,17 +17,20 @@ class Anemometro{
   
   // -----------------------------------------------------------------
 
-  volatile byte numPulsosAnemometro = 0;            // Contador para o sensorSi7021reed switch no anemometro
-  unsigned int  rpm = 0;                            // Rotações por minuto do anemometro
-  float         velocidadeVento = 0;                // Velocidade do vento (km/h)
+  volatile byte numPulsosAnemometro;            // Contador para o sensorSi7021reed switch no anemometro
+  unsigned int  rpm;                            // Rotações por minuto do anemometro
+  float         velocidadeVento;                // Velocidade do vento (km/h)
   unsigned long dataUltimoAfericaoVelocidadeVento;
-  boolean velocidadeDoVentoAferida = false;
+  boolean velocidadeDoVentoAferida;
 
   // -----------------------------------------------------------------#
 
 public:
   Anemometro(){
-    
+    numPulsosAnemometro = 0;
+    rpm = 0;
+    velocidadeVento = 0;
+    velocidadeDoVentoAferida = false;
   }
 
   //Função para calcular o RPM
