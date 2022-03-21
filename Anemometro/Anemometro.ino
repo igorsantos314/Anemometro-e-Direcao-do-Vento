@@ -4,18 +4,34 @@
 void IRAM_ATTR contarQtdInterrupcoesAnemometro();
 
 //----------- Objetos -----------
-Anemometro anemometro();
+Anemometro anemometro;
 
 void setup() {
-  // put your setup code here, to run once:
-  attachInterrupt(digitalPinToInterrupt(2), contarQtdInterrupcoesAnemometro, RISING);
+  Serial.begin(115200); // Define e inicializa a porta para debugar
+  Serial.println();
+  Serial.println("Starting setup...");
+  
+  // Anemometro
+  pinMode(anemometro.pin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(anemometro.pin), contarQtdInterrupcoesAnemometro, RISING); // interrupção 0 está ligado ao pino 2 do arduino. Falling = HIGH > LOW.
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  // Aferir Velocicade do Vento
+  anemometro.aferir();
+  delay(1000);
+  Serial.print(".");
 }
 
 void IRAM_ATTR contarQtdInterrupcoesAnemometro() {
-
+  static unsigned long tempoUltimaInterrupcaoAnem = 0;
+  unsigned long tempoInterrupcao = millis();
+  
+  if (tempoInterrupcao - tempoUltimaInterrupcaoAnem > 200)
+  { 
+    //faz o debounce do reed switch
+    anemometro.somarPulsos(1);
+  }
+  
 }
