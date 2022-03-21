@@ -1,5 +1,5 @@
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BMP280.h>
+//#include <Adafruit_Sensor.h>
+//#include <Adafruit_BMP280.h>
 
 class Anemometro{
 
