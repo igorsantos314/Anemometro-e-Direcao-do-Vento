@@ -1,52 +1,73 @@
-//#include <Adafruit_Sensor.h>
-//#include <Adafruit_BMP280.h>
-
+/**
+ * Classe Anemometro
+ * 
+ * Transforma interrupções aferidas em um intervalo de 30 segundos
+ * em velocidade do vento
+ */
 class Anemometro{
 
   // -----------------------------------------------------------------
-  public: const int pin = 18;
   
   const float pi = 3.14159265;                      // Número de pi
-  const int periodoAfericaoVelocidadeVento = 30000; // Período Aferição Vento entre as medidas (ms) 30000
-  const int raioAnemometro = 65;                    // Raio do anemometro(mm) 
-
-  //extern float velocidadeVento;                   // Velocidade do vento (km/h)
-  //extern boolean isVelocidadeAferida;
-
-  unsigned long dataUltimoEnvioDadosServidor;
+  
+  private: int pin = 18;
+  private: int periodoAfericao = 30000;             // (Default) Período Aferição Vento entre as medidas (ms) 30000
+  private: int raio = 65;                           // (Default) Raio do anemometro(mm) 
+  
+  unsigned long dataUltimoEnvio;
   const int periodoAfericaoGeral = 5000;            // Período Aferição Geral entre as medidas (ms)
   
   // -----------------------------------------------------------------
 
-  volatile byte numPulsosAnemometro;            // Contador para o sensorSi7021reed switch no anemometro
-  unsigned int  rpm;                            // Rotações por minuto do anemometro
-  float         velocidadeVento;                // Velocidade do vento (km/h)
-  unsigned long dataUltimoAfericaoVelocidadeVento;
-  boolean isVelocidadeAferida;
+  volatile byte numPulsosAnemometro = 0;            // Contador para o sensor Si7021 reed switch no anemometro
+  unsigned int  rpm                 = 0;            // Rotações por minuto do anemometro
+  float         velocidadeVento     = 0;            // Velocidade do vento (km/h)
+  unsigned long dataUltimaAfericao  = millis();     // Data da Ultima Afericao
+  boolean isVelocidadeAferida       = false;        // Status da aferição da Velocidade
 
   // -----------------------------------------------------------------
-
+  
 public:
+  /**
+   * Construtor da Classe Anemometro
+   * 
+   * Ao ser invocado o construtor vazio,
+   * os atributos pin, periodoAfericao e raio 
+   * serão atribuidos os valores pré setados.
+   * 
+   * return void
+   */
   Anemometro(){
-    numPulsosAnemometro = 0;
-    rpm = 0;
-    velocidadeVento = 0;
-    isVelocidadeAferida = false;
-    dataUltimoAfericaoVelocidadeVento = millis();
+    
+  }
+
+  /**
+   * Construtor da Classe Anemometro
+   * 
+   * @param int sPin, define o pino de aferição
+   * @param int sPeriodoAfericao, define o período entre aferições
+   * @param int sRaio, define o raio do anemometro
+   * 
+   * return void
+   */
+  Anemometro(int sPin, int sPeriodoAfericao, int sRaio){
+    pin = sPin;
+    periodoAfericao = sPeriodoAfericao;
+    raio = sRaio;
   }
 
   //Função para calcular o RPM
-  void calcularRpmAnemometro()
+  void calcularRpm()
   {
     //Calcular Rotações por minuto (RPM)
-    rpm = ((numPulsosAnemometro) * 60) / (periodoAfericaoVelocidadeVento / 1000);
+    rpm = ((numPulsosAnemometro) * 60) / (periodoAfericao / 1000);
   }
-
+  
   //Função para calcular a velocidade do vento em km/h
   void calcularVelocidadeVento()
   {
     //Calcular velocidade do vento em km/h
-    velocidadeVento = (((2 * pi * raioAnemometro * rpm) / 60) / 1000) * 3.6;
+    velocidadeVento = (((2 * pi * raio * rpm) / 60) / 1000) * 3.6;
   }
   
   //Função para soma quantidade de Pulsos
@@ -67,15 +88,15 @@ public:
 
   //Função para Aferir a velocidade do Vento
   void aferir(){
-    if (millis() > dataUltimoAfericaoVelocidadeVento + periodoAfericaoVelocidadeVento)
+    if (millis() > dataUltimaAfericao + periodoAfericao)
     {
       //Calcular RPM
-      calcularRpmAnemometro();
+      calcularRpm();
 
       //Calcular Velocidade
       calcularVelocidadeVento();    
       
-      dataUltimoAfericaoVelocidadeVento = millis();
+      dataUltimaAfericao = millis();
       isVelocidadeAferida = true;
 
       //Exibir aferição
@@ -89,6 +110,33 @@ public:
   float getWinSpeed(){
     //Retorna a velocidade do vento
     return velocidadeVento;
+  }
+
+  //--- Pino do Anemometro ---
+  void setPin(int sPin){
+    pin = sPin;
+  }
+
+  int getPin(){
+    return pin;
+  }
+
+  //--- Periodo de Afericao de Velocidade do Vento Milisegundos ---
+  void setPeriodoAfericao(int sPeriodoAfericao){
+    periodoAfericao = sPeriodoAfericao;
+  }
+  
+  int getPeriodoAfericao(){
+    return periodoAfericao;
+  }
+
+  //--- Raio do Anemometro em Milimetros ---
+  void setRaio(int sRaio){
+    raio = sRaio;
+  }
+  
+  int getRaio(){
+    return raio;
   }
   
   void toString()

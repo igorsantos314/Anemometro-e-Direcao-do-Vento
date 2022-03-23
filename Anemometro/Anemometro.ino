@@ -12,8 +12,8 @@ void setup() {
   Serial.println("Starting setup...");
   
   // Anemometro
-  pinMode(anemometro.pin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(anemometro.pin), contarQtdInterrupcoesAnemometro, RISING); // interrupção 0 está ligado ao pino 2 do arduino. Falling = HIGH > LOW.
+  pinMode(anemometro.getPin(), INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(anemometro.getPin()), contarQtdInterrupcoesAnemometro, RISING); // interrupção 0 está ligado ao pino 2 do arduino. Falling = HIGH > LOW.
   
 }
 
