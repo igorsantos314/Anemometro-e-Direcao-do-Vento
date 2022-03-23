@@ -7,7 +7,9 @@ void IRAM_ATTR contarQtdInterrupcoesAnemometro();
 Anemometro anemometro;
 
 void setup() {
+
   Serial.begin(115200); // Define e inicializa a porta para debugar
+  
   Serial.println();
   Serial.println("Starting setup...");
   
