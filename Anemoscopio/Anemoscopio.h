@@ -23,23 +23,21 @@ public:
         
   }
   
-  void enventListened(){
+  void enventListener(){
     //Caso Default
-    int sDirect = 1;
-
-    //Esta incorreto
-    for(int i=0; i < 8; i++){
-      //Verificar estado do Pino
-      if(digitalRead(reedPins[i]) == LOW){
-        sDirect = i * 45;
-        break;
-      }
+    byte sDirect = 0;
+    
+    //Varre as 8 posições
+    for(int i=7; i > 0; i--){
+      //Incrementa no byte
+      sDirect = sDirect | (digitalRead(reedPins[7-i]) << i);
     }
     
+    //Envia a direção para ser tratada
     setDirecaoDoVento(sDirect);
   }
   
-  void setDirecaoDoVento(int sDirect)
+  void setDirecaoDoVento(byte sDirect)
   {
     //Ponto não encontrado
     pointer = -1;
@@ -112,6 +110,9 @@ public:
         // default 16, "???" mainly for debugging
         break;
     }
+    
+    //Exibir informações
+    toString();
   }
   
   //Retorna o vetor de ReedPins na memória

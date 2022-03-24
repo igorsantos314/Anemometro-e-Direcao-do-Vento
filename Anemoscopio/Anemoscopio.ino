@@ -6,10 +6,12 @@ void setup() {
   // Varre a lista de pinos para interrupção
   for(int i=0; i < 8; i++){
     int pin = anemoscopio.getReedPins()[i];
-    
+
+    //Código do ESP8266 está como INPUT
     pinMode(pin, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(pin), anemoscopioInterrupt, RISING); // interrupção 0 está ligado ao pino 2 do arduino. Falling = HIGH > LOW.
+    attachInterrupt(digitalPinToInterrupt(pin), anemoscopioInterrupt, RISING); // Falling = HIGH > LOW.
   }
+
 }
 
 void loop() {
@@ -23,7 +25,8 @@ ICACHE_RAM_ATTR void anemoscopioInterrupt()
   static unsigned long tempoUltimaInterrupcaoCompass = 0;
   unsigned long tempoInterrupcao = millis();
   if (tempoInterrupcao - tempoUltimaInterrupcaoCompass > 200)
-  { //faz o debounce do reed switch
-    
+  { 
+    //faz o debounce do reed switch
+    anemoscopio.enventListener();
   }
 }
