@@ -1,12 +1,20 @@
+/*
+ * Classe Anemoscopio
+ * 
+ * 
+ */
 class Anemoscopio{
-
+  
   //Pontos cardiais
   private: const String compass[17] = { "N  ", "NNE", "NE ", "NEE",
                                         "E  ", "SEE", "SE ", "SSE",
                                         "S  ", "SSW", "SW ", "SWW",
                                         "W  ", "NWW", "NW ", "NNW", "???"};
+  
+  //Pins do ESP32
+  private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 25};
               
-  // Variáveis auxiliáres utilizadas para definir a direção do Vento.
+  // Variáveis auxiliáres
   private: byte direct = 1; //Inicia com a posição Norte
   private: int pointer = 0;
   
@@ -15,12 +23,20 @@ public:
         
   }
   
-  void enventListened(int direct){
-    //Seta a direção do vento
-    setDirecaoDoVento(direct);
+  void enventListened(){
+    //Caso Default
+    int sDirect = 1;
 
-    //Exibir
-    toString();
+    //Esta incorreto
+    for(int i=0; i < 8; i++){
+      //Verificar estado do Pino
+      if(digitalRead(reedPins[i]) == LOW){
+        sDirect = i * 45;
+        break;
+      }
+    }
+    
+    setDirecaoDoVento(sDirect);
   }
   
   void setDirecaoDoVento(int sDirect)
@@ -33,6 +49,7 @@ public:
       
     switch (direct)
     {
+      // ---- Casos N, NNE, NE, NEE ----
       case 1:
         pointer = 0;
         break;
@@ -45,6 +62,8 @@ public:
       case 6:
         pointer = 3;
         break;
+
+      // ---- Casos E, SEE, SE, SSE ----  
       case 4:
         pointer = 4;
         break;
@@ -57,6 +76,8 @@ public:
       case 24:
         pointer = 7;
         break;
+
+      // ---- Casos S, SSW, SW, SWW ----   
       case 16:
         pointer = 8;
         break;
@@ -69,6 +90,8 @@ public:
       case 96:
         pointer = 11;
         break;
+
+      // ---- Casos W, NWW, NW, NNW ----    
       case 64:
         pointer = 12;
         break;
@@ -81,6 +104,8 @@ public:
       case 129:
         pointer = 15;
         break;
+
+      //---- Nenhum dos Casos ----        
       default:
         pointer = 16;
         // if nothing else matches, do the default
@@ -88,7 +113,12 @@ public:
         break;
     }
   }
-
+  
+  //Retorna o vetor de ReedPins na memória
+  int *getReedPins(){
+    return reedPins;
+  }
+  
   void toString()
   {
     Serial.print("Direção do Vento: ");
