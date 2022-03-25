@@ -57,6 +57,9 @@ public:
   }
 
   //Função para calcular o RPM
+  /*
+  * 
+  */
   void calcularRpm()
   {
     //Calcular Rotações por minuto (RPM)
