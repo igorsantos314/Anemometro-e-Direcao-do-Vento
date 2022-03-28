@@ -1,8 +1,9 @@
 /**
  * Classe Anemometro
  * 
- * Transforma interrupções aferidas em um intervalo de 30 segundos
- * em velocidade do vento
+ * Calcula a velocidade do vento com base em interrupções aferidas
+ * em um intervalo de 30 segundos.
+ * 
  */
 class Anemometro{
 
@@ -11,19 +12,19 @@ class Anemometro{
   const float pi = 3.14159265;                      // Número de pi
   
   private: int pin = 18;
-  private: int periodoAfericao = 30000;             // (Default) Período Aferição Vento entre as medidas (ms) 30000
-  private: int raio = 65;                           // (Default) Raio do anemometro(mm) 
+  private: int periodoAfericao = 30000;             // (Default) Período Aferição Vento em milésimos de segundo (ms)
+  private: int raio = 65;                           // (Default) Raio do anemometro em milímetros (mm) 
   
-  unsigned long dataUltimoEnvio;
+  unsigned long dataUltimoEnvio;                    
   const int periodoAfericaoGeral = 5000;            // Período Aferição Geral entre as medidas (ms)
   
   // -----------------------------------------------------------------
 
-  volatile byte numPulsosAnemometro = 0;            // Contador para o sensor Si7021 reed switch no anemometro
-  unsigned int  rpm                 = 0;            // Rotações por minuto do anemometro
-  float         velocidadeVento     = 0;            // Velocidade do vento (km/h)
-  unsigned long dataUltimaAfericao  = millis();     // Data da Ultima Afericao
-  boolean isVelocidadeAferida       = false;        // Status da aferição da Velocidade
+  volatile byte numPulsosAnemometro = 0;            // Contador para o sensor Si7021 reed switch no anemômetro
+  unsigned int  rpm                 = 0;            // Rotações por minuto do anemômetro
+  float         velocidadeVento     = 0;            // Velocidade do vento em Km/h
+  unsigned long dataUltimaAfericao  = millis();     // Data da ultima aferição -- ?
+  boolean isVelocidadeAferida       = false;        // Status da aferição da Velocidade em boolean
 
   // -----------------------------------------------------------------
   
@@ -31,9 +32,9 @@ public:
   /**
    * Construtor da Classe Anemometro
    * 
-   * Ao ser invocado o construtor vazio,
-   * os atributos pin, periodoAfericao e raio 
-   * serão atribuidos os valores pré setados.
+   * Ao ser chamado, o construtor vazio,
+   * os atributos pin, o periodoAfericao e o raio 
+   * teram valores atribuidos com dados pré determinados/setados.
    * 
    * return void
    */
@@ -48,7 +49,7 @@ public:
    * @param int sPeriodoAfericao, define o período entre aferições
    * @param int sRaio, define o raio do anemometro
    * 
-   * return void
+   * @return void
    */
   Anemometro(int sPin, int sPeriodoAfericao, int sRaio){
     pin = sPin;
@@ -56,75 +57,138 @@ public:
     raio = sRaio;
   }
 
-  //Função para calcular o RPM
   /*
+  * Função de cálculo do RPM
   * 
+  * Função deve calcular o rpm do anemômetro
+  * 
+  * Não contém parâmetros
+  * 
+  * @return void
   */
   void calcularRpm()
   {
-    //Calcular Rotações por minuto (RPM)
     rpm = ((numPulsosAnemometro) * 60) / (periodoAfericao / 1000);
   }
-  
-  //Função para calcular a velocidade do vento em km/h
+   
+  /*
+  * Função de cálculo da velocidade do vento em Km/h
+  * 
+  * Função deve calcular a velocidade do vento daquele momento do anemômetro
+  * 
+  * Não contém parâmetros
+  * 
+  * @return void
+  */
   void calcularVelocidadeVento()
   {
-    //Calcular velocidade do vento em km/h
     velocidadeVento = (((2 * pi * raio * rpm) / 60) / 1000) * 3.6;
   }
-  
-  //Função para soma quantidade de Pulsos
+
+  /*
+  * Função de soma de quantidade de Pulsos do anemômetro
+  * 
+  * Função deve calcular a quantidade de pulsos do anemômetro, somando mais um a cada pulso
+  * 
+  * @param int quant, deve receber a quantidade de pulsos
+  * 
+  * @return void
+  */
   void somarPulsos(int quant){
     numPulsosAnemometro += 1;
   }
 
-  //Função para resetar os contadores
+  /*
+  * Função para resetar contador
+  * 
+  * Função deve resetar um contador do anemômetro se a velocidade do vento já tenha sido aferida
+  * 
+  * Não contém parâmetros
+  * 
+  * @return void
+  */
   void resetarContador() {
     if(isVelocidadeAferida){
-      //Velocidade do Vento
+      
       isVelocidadeAferida = false;
 
-      //Resetar pulsos do anemometro
       numPulsosAnemometro = 0;
     }
   }
 
-  //Função para Aferir a velocidade do Vento
+  /*
+  * Função de aferição da velocidade do vento
+  * 
+  * Função irá aferir a velocidade em Km/h, exibi-la e resetar o contador para uma nova aferição
+  * 
+  * Não contém parâmetros
+  * 
+  * @return void
+  */
   void aferir(){
     if (millis() > dataUltimaAfericao + periodoAfericao)
     {
-      //Calcular RPM
       calcularRpm();
 
-      //Calcular Velocidade
       calcularVelocidadeVento();    
       
       dataUltimaAfericao = millis();
       isVelocidadeAferida = true;
 
-      //Exibir aferição
-      toString();
+      toString(); //Exibir aferição
       
-      //Resetar o contador
       resetarContador();
     }
   }
 
+  /*
+  * Função para pegar a velocidade do vento
+  * 
+  * Função deve pegar o resultado do cálculo da velocidade do vento em Km/h
+  * da função calcularVelocidadeVento()
+  * 
+  * Não contém parâmetros
+  * 
+  * @return velocidadeVento
+  */
   float getWinSpeed(){
-    //Retorna a velocidade do vento
+    
     return velocidadeVento;
+    
   }
 
-  //--- Pino do Anemometro ---
+  /*
+  * Função para setar o pin 
+  * 
+  * Não contém parâmetros
+  * 
+  * @return void
+  */
   void setPin(int sPin){
     pin = sPin;
   }
 
+  /*
+  * Função irá retornar o pino de conexão do anemometro
+  * 
+  * Não contém parâmetros
+  * 
+  * @return pin
+  */
   int getPin(){
     return pin;
   }
 
   //--- Periodo de Afericao de Velocidade do Vento Milisegundos ---
+  /*
+  * Função para setar o Período de Aferição
+  * 
+  * Função deve setar o valor do período de aferição
+  * 
+  * @params int sPeriodoAfericao
+  * 
+  * @return void
+  */
   void setPeriodoAfericao(int sPeriodoAfericao){
     periodoAfericao = sPeriodoAfericao;
   }

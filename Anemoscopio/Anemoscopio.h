@@ -5,14 +5,14 @@
  */
 class Anemoscopio{
   
-  //Pontos cardiais
+  //Pontos cardiais, colaterais e subcolaterais
   private: const String compass[17] = { "N  ", "NNE", "NE ", "NEE",
                                         "E  ", "SEE", "SE ", "SSE",
                                         "S  ", "SSW", "SW ", "SWW",
                                         "W  ", "NWW", "NW ", "NNW", "???"};
   
   //Pins do ESP32
-  private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 25};
+  private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 34};
               
   // Variáveis auxiliáres
   private: byte direct = 1; //Inicia com a posição Norte
@@ -30,11 +30,17 @@ public:
     //Varre as 8 posições
     for(int i=7; i > 0; i--){
       //Incrementa no byte
-      sDirect = sDirect | (digitalRead(reedPins[7-i]) << i);
+      sDirect = sDirect | ( convert(digitalRead(reedPins[7-i])) << i);
     }
     
     //Envia a direção para ser tratada
     setDirecaoDoVento(sDirect);
+  }
+
+  int convert(int sinal){
+    if(sinal == LOW)
+      return HIGH;
+    return LOW;
   }
   
   void setDirecaoDoVento(byte sDirect)
@@ -112,7 +118,7 @@ public:
     }
     
     //Exibir informações
-    toString();
+    //toString();
   }
   
   //Retorna o vetor de ReedPins na memória
@@ -124,9 +130,9 @@ public:
   {
     Serial.print("Direção do Vento: ");
     Serial.print(direct);
-    Serial.print("\t . ");
+    Serial.print("\t Pointer: ");
     Serial.print(pointer);
-    Serial.print("\t . ");
+    Serial.print("\t Compass: ");
     Serial.print(compass[pointer]);
     //Serial.println(direct, BIN);
     Serial.println();
