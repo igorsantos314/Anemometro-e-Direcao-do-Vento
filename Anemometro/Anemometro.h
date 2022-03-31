@@ -119,8 +119,9 @@ public:
   /*
   * Função de aferição da velocidade do vento
   * 
-  * Função irá aferir a velocidade em Km/h, exibi-la e resetar o contador para uma nova aferição
-  * 
+  * Função realizar o calculo do RPM, após calcula a velocidade do vento com base no RPM calculado,
+  * salva a data da ultima aferição, exibe a velocidade do vento em KM/h e reseta o contador.
+  *
   * Não contém parâmetros
   * 
   * @return void
@@ -144,21 +145,18 @@ public:
   /*
   * Função para pegar a velocidade do vento
   * 
-  * Função deve pegar o resultado do cálculo da velocidade do vento em Km/h
-  * da função calcularVelocidadeVento()
+  * Função deve retornar o resultado do cálculo da velocidade do vento em Km/h
   * 
   * Não contém parâmetros
   * 
-  * @return velocidadeVento
+  * @return float
   */
   float getWinSpeed(){
-    
     return velocidadeVento;
-    
   }
 
   /*
-  * Função para setar o pin 
+  * Função para setar o pin do anemômetro
   * 
   * Não contém parâmetros
   * 
@@ -179,7 +177,6 @@ public:
     return pin;
   }
 
-  //--- Periodo de Afericao de Velocidade do Vento Milisegundos ---
   /*
   * Função para setar o Período de Aferição
   * 
@@ -192,20 +189,43 @@ public:
   void setPeriodoAfericao(int sPeriodoAfericao){
     periodoAfericao = sPeriodoAfericao;
   }
-  
+
+  /*
+   * Função que retorna o perído de aferição setado
+   * 
+   * @return int 
+   */
   int getPeriodoAfericao(){
     return periodoAfericao;
   }
 
-  //--- Raio do Anemometro em Milimetros ---
+  /*
+   * Função para setar o raio do anemômetro
+   * @param int sRaio, raio em milimetros
+   * 
+   * @return void
+   */
   void setRaio(int sRaio){
     raio = sRaio;
   }
-  
+
+  /*
+   * Função para retornar o raio do anemômetro em milimetros
+   * 
+   * Não contém parâmetros
+   * 
+   * @return int
+   */
   int getRaio(){
     return raio;
   }
-  
+
+  /*
+   * Exibe as informações aferidas:
+   *  - Número de pulsos do anemômetro
+   *  - Rotações por minuto(RPM)
+   *  - Velocidade do vento KM/h
+   */
   void toString()
   {
     Serial.println("");

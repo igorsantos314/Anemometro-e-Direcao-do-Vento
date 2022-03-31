@@ -12,7 +12,7 @@ class Anemoscopio{
                                         "W  ", "NWW", "NW ", "NNW", "???"};
   
   //Pins do ESP32
-  private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 34};
+  private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 27};
               
   // Variáveis auxiliáres
   private: byte direct = 1; //Inicia com a posição Norte
@@ -29,6 +29,7 @@ public:
     
     //Varre as 8 posições
     for(int i=7; i > 0; i--){
+      //Serial.print(i);
       //Incrementa no byte
       sDirect = sDirect | ( convert(digitalRead(reedPins[7-i])) << i);
     }
@@ -36,7 +37,7 @@ public:
     //Envia a direção para ser tratada
     setDirecaoDoVento(sDirect);
   }
-
+  
   int convert(int sinal){
     if(sinal == LOW)
       return HIGH;
@@ -49,6 +50,7 @@ public:
     pointer = -1;
 
     //Pino de Direção
+    direct = 0;
     direct = sDirect;
       
     switch (direct)
