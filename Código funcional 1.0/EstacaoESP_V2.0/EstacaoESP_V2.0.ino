@@ -8,10 +8,10 @@
 #include "Adafruit_Si7021.h"
 #include <ThingsBoard.h>
 
-#define SECRET_SSID "ebt-mi8"                               // Dados da Internet
-#define SECRET_PASS "ebtwifimi8"
+#define SECRET_SSID "extensao_iot"                               // Dados da Internet
+#define SECRET_PASS "aluno123"
 
-#define Token "rWxfsfvfCiA10Bp8EtU0"                            // dados do thingsboard / token do canal thingsboard
+#define Token "fV8viFd5vMWZIToDyPYI"                            // dados do thingsboard / token do canal thingsboard
 #define THINGSBOARD_SERVER "eltontorres.asuscomm.com"
 #define SERIAL_DEBUG_BAUD 115200
 
@@ -190,7 +190,7 @@ void getRain(void)
 void firmwareUpdate(void) {
   WiFiClientSecure client;
   client.setCACert(rootCACertificate);
-  httpUpdate.setLedPin(LED_BUILTIN, LOW);
+  //httpUpdate.setLedPin(LED_BUILTIN, LOW);
   t_httpUpdate_return ret = httpUpdate.update(client, URL_fw_Bin);
 
   switch (ret) {
