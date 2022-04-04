@@ -1,4 +1,4 @@
-/*
+/**
  * Classe Anemoscopio
  * 
  * 
@@ -10,12 +10,18 @@ class Anemoscopio{
                                         "E  ", "SEE", "SE ", "SSE",
                                         "S  ", "SSW", "SW ", "SWW",
                                         "W  ", "NWW", "NW ", "NNW", "???"};
+
+  //Data da ultima interrupção
+  private: unsigned long tempoUltimaInterrupcao = 0;
+  
+  //Tempo de debouncing
+  private: int debounce = 250;
   
   //Pins do ESP32
   private: int reedPins[8] = {16, 17, 18, 19, 21, 22, 23, 27};
               
   // Variáveis auxiliáres
-  private: byte direct = 1; //Inicia com a posição Norte
+  private: byte direct = 0; //Inicia com a posição Norte
   private: int pointer = 0;
   
 public:
@@ -24,18 +30,28 @@ public:
   }
   
   void enventListener(){
-    //Caso Default
-    byte sDirect = 0;
+
+    // Interrupt called (No Serial no read no wire in this function, and DEBUG disabled on PCF library)
+    unsigned long tempoInterrupcao = millis();
     
-    //Varre as 8 posições
-    for(int i=7; i > 0; i--){
-      //Serial.print(i);
-      //Incrementa no byte
-      sDirect = sDirect | ( convert(digitalRead(reedPins[7-i])) << i);
+    if (tempoInterrupcao - tempoUltimaInterrupcao > debounce)
+    { 
+      //Caso Default
+      byte sDirect = 0;
+      
+      //Varre as 8 posições
+      for(int i=7; i >= 0; i--){
+        //Serial.print(i);
+        //Incrementa no byte
+        sDirect = sDirect | ( convert(digitalRead(reedPins[7-i])) << i);
+      }
+      
+      //Envia a direção para ser tratada
+      setDirecaoDoVento(sDirect);
+
+      //Atualiza a variável de debounce
+      tempoUltimaInterrupcao = tempoInterrupcao;
     }
-    
-    //Envia a direção para ser tratada
-    setDirecaoDoVento(sDirect);
   }
   
   int convert(int sinal){
@@ -46,6 +62,8 @@ public:
   
   void setDirecaoDoVento(byte sDirect)
   {
+    //Serial.println(sDirect, BIN);
+    
     //Ponto não encontrado
     pointer = -1;
 
@@ -126,6 +144,16 @@ public:
   //Retorna o vetor de ReedPins na memória
   int *getReedPins(){
     return reedPins;
+  }
+
+  //Seta o tempo de espera entre as aferições
+  void setDebounce(int sDebounce){
+    debounce = sDebounce;  
+  }
+  
+  //Retorna o tempo de espera entre as aferições
+  int getDebounce(){
+    return debounce;  
   }
   
   void toString()
