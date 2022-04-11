@@ -8,6 +8,10 @@
 #include "Adafruit_Si7021.h"
 #include <ThingsBoard.h>
 
+//Libs Anemometro e Anemoscópio
+#include "Anemometro.h"
+#include "Anemoscopio.h"
+
 #define SECRET_SSID "extensao_iot"                               // Dados da Internet
 #define SECRET_PASS "aluno123"
 
@@ -31,12 +35,15 @@ float rain = 0;                                              // Chuva temporario
 Adafruit_BMP280 bmpSensor;                                   //objetos de comunicação com os sensores
 Adafruit_Si7021 siSensor = Adafruit_Si7021();
 
-WiFiClient cliente;                                         // objetos WiFi e Thingsboard
+Anemometro anemometro;                                       //Objeto de comunicação anemômetro e anemoscópio
+Anemoscopio anemoscopio;                                     
+
+WiFiClient cliente;                                          // objetos WiFi e Thingsboard
 ThingsBoard tb(cliente);
 
-int status = WL_IDLE_STATUS;                               // status conexão WiFi
+int status = WL_IDLE_STATUS;                                 // status conexão WiFi
 
-char ssid[] = SECRET_SSID;                                 // variáveis de conexão ao WiFi
+char ssid[] = SECRET_SSID;                                   // variáveis de conexão ao WiFi
 char pass[] = SECRET_PASS;
 
 String FirmwareVer = {                                     // versão do firmware
@@ -190,7 +197,10 @@ void getRain(void)
 void firmwareUpdate(void) {
   WiFiClientSecure client;
   client.setCACert(rootCACertificate);
+
+  //Está dando erro
   //httpUpdate.setLedPin(LED_BUILTIN, LOW);
+  
   t_httpUpdate_return ret = httpUpdate.update(client, URL_fw_Bin);
 
   switch (ret) {
