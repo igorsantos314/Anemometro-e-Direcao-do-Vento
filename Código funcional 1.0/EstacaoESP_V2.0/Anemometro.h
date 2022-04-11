@@ -23,7 +23,7 @@ class Anemometro{
   volatile byte numPulsosAnemometro = 0;            // Contador para o sensor Si7021 reed switch no anemômetro
   unsigned int  rpm                 = 0;            // Rotações por minuto do anemômetro
   float         velocidadeVento     = 0;            // Velocidade do vento em Km/h
-  unsigned long dataUltimaAfericao  = millis();     // Data da ultima aferição -- ?
+  unsigned long dataUltimaAfericao  = 0;     // Data da ultima aferição -- ?
   boolean isVelocidadeAferida       = false;        // Status da aferição da Velocidade em boolean
 
   // -----------------------------------------------------------------

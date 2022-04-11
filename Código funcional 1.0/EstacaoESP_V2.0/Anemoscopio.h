@@ -10,7 +10,7 @@ class Anemoscopio{
                                         "E  ", "SEE", "SE ", "SSE",
                                         "S  ", "SSW", "SW ", "SWW",
                                         "W  ", "NWW", "NW ", "NNW", "???"};
-
+  
   //Data da ultima interrupção
   private: unsigned long tempoUltimaInterrupcao = 0;
   
@@ -154,6 +154,11 @@ public:
   //Retorna o tempo de espera entre as aferições
   int getDebounce(){
     return debounce;  
+  }
+
+  //Retorna a direção do vento
+  public: int getPointer(){
+    return pointer;  
   }
   
   void toString()
