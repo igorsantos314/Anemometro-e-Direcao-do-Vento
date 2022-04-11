@@ -1,6 +1,5 @@
 /**
  * Classe Anemoscopio
->>>>>>> refs/remotes/origin/master
  * 
  * 
  */
@@ -11,7 +10,7 @@ class Anemoscopio{
                                         "E  ", "SEE", "SE ", "SSE",
                                         "S  ", "SSW", "SW ", "SWW",
                                         "W  ", "NWW", "NW ", "NNW", "???"};
-
+  
   //Data da ultima interrupção
   private: unsigned long tempoUltimaInterrupcao = 0;
   
@@ -69,6 +68,7 @@ public:
     pointer = -1;
 
     //Pino de Direção
+    direct = 0;
     direct = sDirect;
       
     switch (direct)
@@ -155,42 +155,12 @@ public:
   int getDebounce(){
     return debounce;  
   }
-  
-  /*
-   * Função que modifica um pino do vetor, com base na posição,
-   * verificando que a posição seja menor que o tamanho do vetor reedPins
-   * 
-   * @param int posicao, posição do vetor
-   * @param int pin, pino do dispositivo
-   * 
-   * @return void
-   */
-  void setPin(int posicao, int pin){
-    if(posicao < sizeof(reedPins))
-      reedPins[posicao] = pin;
-  }
-  
-  /*
-   * Função que retorna o pino, com base na posição do vetor,
-   * verificando que a posição seja menor que o tamanho do vetor reedPins
-   * 
-   * @param int posicao, posição do vetor
-   * 
-   * @return int
-   */
-  int getPin(int posicao){
-    if(posicao < sizeof(reedPins))
-      return reedPins[posicao];
-  }
 
-  /*
-   * Função que exibe as informações de direção do vento,
-   * pointer e a direção do compass
-   * 
-   * Não recebe parâmetros
-   * 
-   * @return void
-   */
+  //Retorna a direção do vento
+  public: int getPointer(){
+    return pointer;  
+  }
+  
   void toString()
   {
     Serial.print("Direção do Vento: ");
