@@ -26,6 +26,11 @@ void loop() {
   Serial.print(".");
 }
 
+/**
+ * Função que roda sincronamente e conta a quantidade de interrupções, quando a condição de debouncing for verdadeira, ou seja, maior que 200 ms
+ * 
+ * @return void
+ */
 void IRAM_ATTR contarQtdInterrupcoesAnemometro() {
   static unsigned long tempoUltimaInterrupcaoAnem = 0;
   unsigned long tempoInterrupcao = millis();

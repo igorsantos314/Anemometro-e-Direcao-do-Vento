@@ -8,7 +8,6 @@
 class Anemometro{
 
   // -----------------------------------------------------------------
-  
   const float pi = 3.14159265;                      // Número de pi
   
   private: int pin = 18;
@@ -57,10 +56,8 @@ public:
     raio = sRaio;
   }
 
-  /*
+  /**
   * Função de cálculo do RPM
-  * 
-  * Função deve calcular o rpm do anemômetro
   * 
   * Não contém parâmetros
   * 
@@ -71,10 +68,8 @@ public:
     rpm = ((numPulsosAnemometro) * 60) / (periodoAfericao / 1000);
   }
    
-  /*
+  /**
   * Função de cálculo da velocidade do vento em Km/h
-  * 
-  * Função deve calcular a velocidade do vento daquele momento do anemômetro
   * 
   * Não contém parâmetros
   * 
@@ -85,23 +80,19 @@ public:
     velocidadeVento = (((2 * pi * raio * rpm) / 60) / 1000) * 3.6;
   }
 
-  /*
-  * Função de soma de quantidade de Pulsos do anemômetro
-  * 
-  * Função deve calcular a quantidade de pulsos do anemômetro, somando mais um a cada pulso
+  /**
+  * Função que soma a quantidade de pulsos do anemômetro, somando quant a cada pulso(chamada)
   * 
   * @param int quant, deve receber a quantidade de pulsos
   * 
   * @return void
   */
   void somarPulsos(int quant){
-    numPulsosAnemometro += 1;
+    numPulsosAnemometro += quant;
   }
-
-  /*
-  * Função para resetar contador
-  * 
-  * Função deve resetar um contador do anemômetro se a velocidade do vento já tenha sido aferida
+  
+  /**
+  * Função deve resetar um contador do anemômetro caso a velocidade do vento já tenha sido aferida
   * 
   * Não contém parâmetros
   * 
@@ -116,10 +107,8 @@ public:
     }
   }
 
-  /*
-  * Função de aferição da velocidade do vento
-  * 
-  * Função realizar o calculo do RPM, após calcula a velocidade do vento com base no RPM calculado,
+  /**
+  * Função de aferição da velocidade do vento, realiza o calculo do RPM, após calcula a velocidade do vento com base no RPM calculado,
   * salva a data da ultima aferição, exibe a velocidade do vento em KM/h e reseta o contador.
   *
   * Não contém parâmetros
@@ -142,10 +131,8 @@ public:
     }
   }
 
-  /*
-  * Função para pegar a velocidade do vento
-  * 
-  * Função deve retornar o resultado do cálculo da velocidade do vento em Km/h
+  /**
+  * Função para retornar a velocidade do vento em Km/h
   * 
   * Não contém parâmetros
   * 
@@ -166,8 +153,8 @@ public:
     pin = sPin;
   }
 
-  /*
-  * Função irá retornar o pino de conexão do anemometro
+  /**
+  * Função para retornar o pino de conexão do anemômetro
   * 
   * Não contém parâmetros
   * 
@@ -177,10 +164,8 @@ public:
     return pin;
   }
 
-  /*
+  /**
   * Função para setar o Período de Aferição
-  * 
-  * Função deve setar o valor do período de aferição
   * 
   * @params int sPeriodoAfericao
   * 
@@ -190,7 +175,7 @@ public:
     periodoAfericao = sPeriodoAfericao;
   }
 
-  /*
+  /**
    * Função que retorna o perído de aferição setado
    * 
    * @return int 
@@ -199,7 +184,7 @@ public:
     return periodoAfericao;
   }
 
-  /*
+  /**
    * Função para setar o raio do anemômetro
    * @param int sRaio, raio em milimetros
    * 
@@ -209,7 +194,7 @@ public:
     raio = sRaio;
   }
 
-  /*
+  /**
    * Função para retornar o raio do anemômetro em milimetros
    * 
    * Não contém parâmetros
@@ -219,12 +204,11 @@ public:
   int getRaio(){
     return raio;
   }
-
-  /*
-   * Exibe as informações aferidas:
-   *  - Número de pulsos do anemômetro
-   *  - Rotações por minuto(RPM)
-   *  - Velocidade do vento KM/h
+  
+  /**
+   * Exibe as informações aferidas: Número de pulsos do anemômetro, Rotações por minuto(RPM), Velocidade do vento KM/h
+   *  
+   * @return void
    */
   void toString()
   {

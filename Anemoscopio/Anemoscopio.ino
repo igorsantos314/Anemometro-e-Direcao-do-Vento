@@ -1,5 +1,6 @@
 #include "Anemoscopio.h"
 
+static unsigned long tempoUltimaInterrupcaoCompass = 0;
 Anemoscopio anemoscopio;
 
 void setup() {
@@ -31,10 +32,13 @@ void loop() {
 ICACHE_RAM_ATTR void anemoscopioInterrupt()
 {
   // Interrupt called (No Serial no read no wire in this function, and DEBUG disabled on PCF library)
-  static unsigned long tempoUltimaInterrupcaoCompass = 0;
   unsigned long tempoInterrupcao = millis();
+  
   if (tempoInterrupcao - tempoUltimaInterrupcaoCompass > 200)
   { 
+    //Atribui a data da ultima aferição, para processamento da função assincrona
+    tempoUltimaInterrupcaoCompass = millis();
+    
     //faz o debounce do reed switch
     anemoscopio.enventListener();
   }
