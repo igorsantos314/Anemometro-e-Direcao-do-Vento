@@ -12,10 +12,10 @@
 #include "Anemometro.h"
 #include "Anemoscopio.h"
 
-#define SECRET_SSID "raquel"                               // Dados da Internet
-#define SECRET_PASS "nmtf0175"
+#define SECRET_SSID "GST_IGOR"                               // Dados da Internet
+#define SECRET_PASS "13579ig*"
 
-#define Token "7ce05Qwj88XygWy066Oi"                            // dados do thingsboard / token do canal thingsboard
+#define Token "fV8viFd5vMWZIToDyPYI"                            // dados do thingsboard / token do canal thingsboard
 #define THINGSBOARD_SERVER "eltontorres.asuscomm.com"
 #define SERIAL_DEBUG_BAUD 115200
 
@@ -65,8 +65,9 @@ int FirmwareVersionCheck();
 void setup() {
   Serial.begin(SERIAL_DEBUG_BAUD);
 
-  Serial.print("Bela Atualização");
-
+  Serial.println("");
+  Serial.println("----- Acordei ^_º -----");
+  
   pinMode(RainSensorPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(RainSensorPin), forceIncrement, FALLING);        // caso especial force increment
   attachInterrupt(digitalPinToInterrupt(anemometro.getPin()), contarQtdInterrupcoesAnemometro, RISING); // interrupção 0 está ligado ao pino 2 do arduino. Falling = HIGH > LOW.
@@ -142,7 +143,7 @@ void setup() {
     }
 
     //Periodo de aferição do Anemometro
-    wait(5);
+    wait(45, true);
     
     //Aferir anemometro
     anemometro.aferir();
@@ -151,19 +152,24 @@ void setup() {
     anemoscopio.toString();
     
     //Enviar telemetria
-    tb.sendTelemetryInt("teste", 10);
-    tb.sendTelemetryFloat("winSpeed", anemometro.getWinSpeed());
+    //tb.sendTelemetryInt("batery", 25);
+    //tb.sendTelemetryFloat("winSpeed", anemometro.getWinSpeed());
     //tb.sendTelemetryInt("winPointer", anemoscopio.getPointer());
+
+    tb.sendTelemetryInt("batery", 25);
+    tb.sendTelemetryFloat("winSpeed", 23.55);
+    tb.sendTelemetryInt("winPointer", 11);
     
     //Espera 10 segundos
-    wait(10);
+    wait(10, false);
   }
   
   Serial.flush();
   
   Serial.println("");
-  Serial.print("Vou a mimir ...");
+  Serial.print(" ----- Vou dormir -_- -----");
   
+  //Iniciar Deep Sleep
   esp_deep_sleep_start();
 }
 
@@ -171,12 +177,19 @@ void loop() {
   
 }
 
-void wait(int ms){
-  for(int i=0; i < ms; i++){
+void wait(int s, boolean show_seconds){
+  for(int i=0; i < s; i++){
+    //Exibir segundos
+    if(show_seconds && i%5 == 0){
+      Serial.print("(");
+      Serial.print(i);
+      Serial.print("s)");
+    }
+    
     Serial.print(".");
     delay(1000);
   }
-
+  
   Serial.println("");
 }
 
