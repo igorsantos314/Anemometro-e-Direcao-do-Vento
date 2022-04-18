@@ -54,6 +54,7 @@ String FirmwareVer = {                                     // versão do firmwar
 #define URL_fw_Bin "https://raw.githubusercontent.com/EvertonLucasGomes/Arduino_OTA/main/fw.bin"
 
 //Headers
+void sendTestTelemetry();
 void IRAM_ATTR contarQtdInterrupcoesAnemometro();
 void connect_wifi();
 void reconnect();                                         
@@ -152,22 +153,16 @@ void setup() {
     anemoscopio.toString();
     
     //Enviar telemetria
-    //tb.sendTelemetryInt("batery", 25);
-    //tb.sendTelemetryFloat("winSpeed", anemometro.getWinSpeed());
-    //tb.sendTelemetryInt("winPointer", anemoscopio.getPointer());
+    tb.sendTelemetryFloat("winSpeed", anemometro.getWinSpeed());
+    tb.sendTelemetryInt("winPointer", anemoscopio.getPointer());
 
-    tb.sendTelemetryInt("batery", 25);
-    tb.sendTelemetryFloat("winSpeed", 23.55);
-    tb.sendTelemetryInt("winPointer", 11);
-    
-    //Espera 10 segundos
-    wait(10, false);
+    //sendTestTelemetry();
   }
-  
-  Serial.flush();
   
   Serial.println("");
   Serial.print(" ----- Vou dormir -_- -----");
+
+  Serial.flush();
   
   //Iniciar Deep Sleep
   esp_deep_sleep_start();
@@ -175,6 +170,28 @@ void setup() {
 
 void loop() {
   
+}
+
+void sendTestTelemetry(){
+
+  //BMP280
+  tb.sendTelemetryFloat("temperature", random(100));
+  tb.sendTelemetryFloat("pressure", random(100));
+  tb.sendTelemetryFloat("altitude", random(100));
+  
+  //SI7021
+  tb.sendTelemetryFloat("humidity", random(100));
+  tb.sendTelemetryFloat("SItemperature", random(100));
+  
+  //Anemometro e Anemoscópio
+  tb.sendTelemetryFloat("winSpeed", random(100));
+  tb.sendTelemetryInt("winPointer", random(100));
+
+  //Bateria
+  tb.sendTelemetryInt("batery", random(100));
+  
+  //Espera 10 segundos
+  wait(10, false);
 }
 
 void wait(int s, boolean show_seconds){
