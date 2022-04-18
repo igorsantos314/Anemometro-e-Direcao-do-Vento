@@ -11,7 +11,7 @@ class Anemometro{
   
   const float pi = 3.14159265;                      // Número de pi
   
-  private: int pin = 18;
+  private: int pin = 5;
   private: int periodoAfericao = 30000;             // (Default) Período Aferição Vento em milésimos de segundo (ms)
   private: int raio = 65;                           // (Default) Raio do anemometro em milímetros (mm) 
   

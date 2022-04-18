@@ -33,7 +33,7 @@ void loop() {
 
 ICACHE_RAM_ATTR void anemoscopioInterrupt()
 {
-<<<<<<< HEAD
+// <<<<<<< HEAD
   // Interrupt called (No Serial no read no wire in this function, and DEBUG disabled on PCF library)
   unsigned long tempoInterrupcao = millis();
   
@@ -45,8 +45,8 @@ ICACHE_RAM_ATTR void anemoscopioInterrupt()
     //faz o debounce do reed switch
     anemoscopio.enventListener();
   }
-=======
+// =======
   //faz o debounce do reed switch
   anemoscopio.enventListener();
->>>>>>> refs/remotes/origin/master
+// >>>>>>> refs/remotes/origin/master
 }

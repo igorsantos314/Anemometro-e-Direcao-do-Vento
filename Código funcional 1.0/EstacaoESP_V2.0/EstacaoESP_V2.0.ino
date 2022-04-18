@@ -12,8 +12,8 @@
 #include "Anemometro.h"
 #include "Anemoscopio.h"
 
-#define SECRET_SSID "GST_IGOR"                               // Dados da Internet
-#define SECRET_PASS "13579ig*"
+#define SECRET_SSID "extensao_iot"                               // Dados da Internet
+#define SECRET_PASS "aluno123"
 
 #define Token "fV8viFd5vMWZIToDyPYI"                            // dados do thingsboard / token do canal thingsboard
 #define THINGSBOARD_SERVER "eltontorres.asuscomm.com"
