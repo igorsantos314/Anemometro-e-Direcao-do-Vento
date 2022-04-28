@@ -2,7 +2,6 @@
 
 Bateria bateria;
 
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200); // Define e inicializa a porta para debugar
@@ -10,7 +9,7 @@ void setup() {
   Serial.println();
   Serial.println("Starting setup...");
   
-  bateria.setPin(33);
+  bateria.setPin(35);
   pinMode(bateria.getPin(), INPUT);  
 }
 

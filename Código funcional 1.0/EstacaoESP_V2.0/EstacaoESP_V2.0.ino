@@ -8,12 +8,16 @@
 #include "Adafruit_Si7021.h"
 #include <ThingsBoard.h>
 
-//Libs Anemometro e Anemoscópio
+//Libs Anemometro, Anemoscópio e Bateria
 #include "Anemometro.h"
 #include "Anemoscopio.h"
+#include "Bateria.h"
 
-#define SECRET_SSID "extensao_iot"                               // Dados da Internet
-#define SECRET_PASS "aluno123"
+#define SECRET_SSID "DIGITAL-Laura"                                // Dados da Internet - Outros
+#define SECRET_PASS "89621128"
+
+//#define SECRET_SSID "extensao_iot"                               // Dados da Internet - LAB
+//#define SECRET_PASS "aluno123"
 
 #define Token "fV8viFd5vMWZIToDyPYI"                            // dados do thingsboard / token do canal thingsboard
 #define THINGSBOARD_SERVER "eltontorres.asuscomm.com"
@@ -35,8 +39,9 @@ float rain = 0;                                              // Chuva temporario
 Adafruit_BMP280 bmpSensor;                                   //objetos de comunicação com os sensores
 Adafruit_Si7021 siSensor = Adafruit_Si7021();
 
-Anemometro anemometro;                                       //Objeto de comunicação anemômetro e anemoscópio
+Anemometro anemometro;                                       //Objeto de comunicação anemômetro, anemoscópio e bateria
 Anemoscopio anemoscopio;                                     
+Bateria bateria;
 
 WiFiClient cliente;                                          // objetos WiFi e Thingsboard
 ThingsBoard tb(cliente);
@@ -98,7 +103,7 @@ void setup() {
   if (FirmwareVersionCheck()) {                           // checagem de versão
       firmwareUpdate();
     }
-
+    
   // Connect to WiFi network
   if (!tb.connected())                                  //verifica conexão thingsboard
   { 
@@ -151,11 +156,15 @@ void setup() {
 
     //Exibir aferição do anemoscopio e anemometro
     anemoscopio.toString();
+
+    //Aferir Bateria
+    bateria.aferir();
     
     //Enviar telemetria
     tb.sendTelemetryFloat("winSpeed", anemometro.getWinSpeed());
     tb.sendTelemetryInt("winPointer", anemoscopio.getPointer());
-
+    tb.sendTelemetryFloat("battery", bateria.getPorcentagem());
+    
     //sendTestTelemetry();
   }
   
@@ -188,7 +197,7 @@ void sendTestTelemetry(){
   tb.sendTelemetryInt("winPointer", random(100));
 
   //Bateria
-  tb.sendTelemetryInt("batery", random(100));
+  tb.sendTelemetryInt("battery", random(100));
   
   //Espera 10 segundos
   wait(10, false);

@@ -20,7 +20,7 @@ public:
 
     //Porcentagem da bateria
     bateryLevel = map(raw, 0.0f, batteryCapacity, 0, 100);
-
+    
     //Exibir informações
     toString();
   }
@@ -29,7 +29,7 @@ public:
     return raw;  
   }
 
-  int getPorcentagem(){
+  float getPorcentagem(){
     return bateryLevel;
   }
   
